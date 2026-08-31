@@ -1,0 +1,8 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: StressChaos
+metadata: {name: demo-api-memory, namespace: sre-lab}
+spec:
+  mode: one
+  selector: {namespaces: [sre-lab], labelSelectors: {app: demo-api}}
+  stressors: {memory: {workers: 1, size: 160MB}}
+  duration: 60s

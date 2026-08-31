@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata: {name: demo-api-slo, namespace: monitoring}
+spec:
+  groups:
+    - name: demo-api
+      rules:
+        - record: demo:request_success:ratio5m
+          expr: sum(rate(demo_http_requests_total{status="2xx"}[5m])) / sum(rate(demo_http_requests_total[5m]))
+        - alert: DemoAPIFastBurn
+          expr: (1 - demo:request_success:ratio5m) > 14.4 * 0.001
+          for: 2m
+          labels: {severity: critical}
+          annotations: {summary: "Demo API is rapidly consuming its error budget"}
+        - alert: DemoAPIPodsUnavailable
+          expr: kube_deployment_status_replicas_available{namespace="sre-lab",deployment="demo-api"} < 2
+          for: 2m
+          labels: {severity: warning}
+          annotations: {summary: "Fewer than two Demo API replicas are available"}

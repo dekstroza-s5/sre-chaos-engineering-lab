@@ -1,0 +1,17 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata: {name: demo-api, namespace: sre-lab}
+spec:
+  minAvailable: 2
+  selector: {matchLabels: {app: demo-api}}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata: {name: demo-api, namespace: sre-lab}
+spec:
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: demo-api}
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource: {name: cpu, target: {type: Utilization, averageUtilization: 70}}

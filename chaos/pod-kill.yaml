@@ -1,0 +1,8 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: PodChaos
+metadata: {name: demo-api-pod-kill, namespace: sre-lab}
+spec:
+  action: pod-kill
+  mode: one
+  selector: {namespaces: [sre-lab], labelSelectors: {app: demo-api}}
+  duration: 30s

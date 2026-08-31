@@ -1,0 +1,9 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: DNSChaos
+metadata: {name: external-dns-error, namespace: sre-lab}
+spec:
+  action: error
+  mode: all
+  patterns: ["*.example.invalid"]
+  selector: {namespaces: [sre-lab], labelSelectors: {app: demo-api}}
+  duration: 60s
