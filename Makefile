@@ -7,7 +7,7 @@ check:
 test:
 	go test -race ./...
 build:
-	docker build -t sre-demo-api:local app
+	docker build -f app/Dockerfile -t sre-demo-api:local .
 cluster:
 	bash scripts/create-cluster.sh
 deploy: build
